@@ -1,27 +1,33 @@
+import { useState } from "react";
+import DeleteUser from "./delete-user";
 
+export const UserRow = (user: User) => {
 
-export const UserRow: React.FC<User> = ({ avatar, initials, name, username, status, role, email, teams }) => {
+  const [isVisible, setIsVisible] = useState(false)
+
   return (
+    <>
+      <DeleteUser isVisible={isVisible} setIsVisible={setIsVisible} user={user} />
       <tr className="border-b border-gray-200">
           <td className="px-6 py-4 text-left flex flex-row">
-              {avatar ? (
-                  <img loading="lazy" src={avatar} alt={`Avatar of ${name}`} className="shrink-0 w-10 aspect-square inline-block mr-2" />
+              {user.avatar ? (
+                  <img loading="lazy" src={user.avatar} alt={`Avatar of ${user.name}`} className="shrink-0 w-10 aspect-square inline-block mr-2" />
               ) : (
                   <div className="inline-block justify-center items-center px-2 text-base font-medium leading-6 text-center text-violet-500 bg-purple-50 rounded-[200px] mr-2">
-                      {initials}
+                      {user.initials}
                   </div>
               )}
               <div className="">
-                <span className="font-medium text-gray-900">{name}</span>
-                <div className="text-gray-500">{username}</div>
+                <span className="font-medium text-gray-900">{user.name}</span>
+                <div className="text-gray-500">{user.username}</div>
               </div>
           </td>
-          <td className="px-6 py-4">{status}</td>
-          <td className="px-6 py-4">{role}</td>
-          <td className="px-6 py-4">{email}</td>
+          <td className="px-6 py-4">{user.status}</td>
+          <td className="px-6 py-4">{user.role}</td>
+          <td className="px-6 py-4">{user.email}</td>
           <td className="px-6 py-4">
               <div className="flex gap-1">
-                  {teams.map((team, index) => (
+                  {user.teams.map((team, index) => (
                       <span
                           key={index}
                           className={`justify-center px-2 py-0.5 rounded-2xl ${team === "+4" ? 
@@ -35,10 +41,11 @@ export const UserRow: React.FC<User> = ({ avatar, initials, name, username, stat
           </td>
           <td className="px-6 py-4">
             <div className="flex gap-1">
-              <div className="">X</div>
-              <div className="">X</div>
+              <button className="" onClick={() => setIsVisible(true)}>X</button>
+              <button className="">X</button>
             </div>
           </td>
       </tr>
+    </>
   );
 };

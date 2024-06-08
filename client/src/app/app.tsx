@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { UserRow } from "components/user-card";
-import { users } from "app/data";
+import { users } from "../constants/data";
 import API from "../services"
-
 const Table: React.FC = () => {
 
     const [usersData, setusersData] = useState([]);
