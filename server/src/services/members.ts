@@ -2,6 +2,12 @@ import { Request, Response } from "express"
 import * as db from "../db"
 
 export const getMembers = async (req: Request, res: Response) => {
+
+  let { page = 1, limit = 10} = req.query;
+
+  limit = Number(limit)
+  const offset = (Number(page) - 1)*limit
+
   try {
     const result = await db.query(`
       --sql
@@ -19,13 +25,14 @@ export const getMembers = async (req: Request, res: Response) => {
         WHERE m.is_deleted = FALSE
         GROUP BY m.id
         ORDER BY m.id
-        LIMIT 10 OFFSET $1
+        LIMIT $1
+        OFFSET $2
       )
       SELECT json_agg(member_team) FROM member_team;
-    `, [0]);
+    `, [ limit, offset ]);
 
     return res.status(200).json({
-      data: result.rows[0].json_agg
+      data: result.rows[0].json_agg || []
     }).end();
     
   } catch (error) {
@@ -109,16 +116,71 @@ export const addMember = async (req: Request, res: Response) => {
     
   } catch (error) {
     await db.query('ROLLBACK');
-    console.log("Error: ", error)
     return res.status(500).end();
   }
 
 }
 
 export const updateMember = async (req: Request, res: Response) => {
+  
+  const id = Number(req.params['id']);
+  const { name, user_name, email, role } = req.body;
 
+  try {
+    const result = await db.query(`
+      UPDATE member SET
+        name = $1,
+        user_name = $2,
+        email = $3,
+        role = $4
+      WHERE id = $5
+      RETURNING *;
+    `, [ name, user_name, email, role, id ]);
+
+    const teamData = await db.query(`
+      SELECT team FROM member_team WHERE member_id = $1;
+    `, [ id ]);
+
+    return res.status(204).json({
+      data: {
+        ...result.rows[0],
+        team: [...teamData.rows.map(i => i.team)]
+      }
+    }).end();
+  } catch (error) {
+    console.error(error);
+    return res.status(500).end();
+  }
 }
 
 export const deleteMember = async (req: Request, res: Response) => {
+  const id = Number(req.params['id']);
+
+  if(id <= 0) {
+    return res.status(400).json({
+      error: "Invalid user id"
+    }).end();
+  }
+
+  try {
+    const teamData = await db.query(`
+      SELECT team FROM member_team WHERE member_id = $1;
+    `, [ id ]);
+
+    const result = await db.query(`
+      DELETE FROM member WHERE id = $1 RETURNING *;
+    `, [ id ]);
+
+    const data = result.rows.length ? {
+      ...result.rows[0],
+      team: [...teamData.rows.map(i => i.team)]
+    } : null
+
+    return res.status(200).json({ data }).end()
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).end();
+  }
 
 }
