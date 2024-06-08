@@ -6,7 +6,7 @@ export const getMembers = async (req: Request, res: Response) => {
   let { page = 1, limit = 10} = req.query;
 
   limit = Number(limit)
-  const offset = (Number(page) - 1)*limit
+  const offset = (Number(page) - 1) * limit
 
   try {
     const result = await db.query(`
