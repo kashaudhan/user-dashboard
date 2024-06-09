@@ -1,13 +1,16 @@
 import { useState } from "react";
 import DeleteUser from "./delete-user";
+import EditUser from "./edit-user";
 
 export const UserRow = (user: User) => {
 
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false);
+  const [isEditFormVisible, setIsEditFormVisible] = useState(false);
 
   return (
     <>
-      <DeleteUser isVisible={isVisible} setIsVisible={setIsVisible} user={user} />
+      <EditUser isVisible={isEditFormVisible} setIsVisible={setIsEditFormVisible} user={user} />
+      <DeleteUser isVisible={isVisible} setIsVisible={setIsVisible} id={user.id} />
       <tr className="border-b border-gray-200">
           <td className="px-6 py-4 text-left flex flex-row">
               {user.avatar ? (
@@ -41,8 +44,8 @@ export const UserRow = (user: User) => {
           </td>
           <td className="px-6 py-4">
             <div className="flex gap-1">
-              <button className="" onClick={() => setIsVisible(true)}>X</button>
-              <button className="">X</button>
+              <button className="" onClick={() => setIsVisible(true)}>Del</button>
+              <button className="" onClick={() => setIsEditFormVisible(true)}>Edit</button>
             </div>
           </td>
       </tr>
