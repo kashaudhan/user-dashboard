@@ -11,8 +11,12 @@ export interface IItem {
 }
 
 export interface IUser {
-  id: number;
+  id?: number;
+  name: string;
+  user_name: string;
+  avatar: string;
+  is_active: boolean;
   role: TUserRole;
   email: string;
-  last_login: string;
+  teams?: string[];
 }

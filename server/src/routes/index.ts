@@ -12,4 +12,8 @@ router.post("/members", services.addMember);
 router.put("/members/:id", services.updateMember);
 router.delete("/members/:id", services.deleteMember);
 
+// add multiple users
+router.post("/members/add-multiple", services.addMembers);
+
+
 export default router;
