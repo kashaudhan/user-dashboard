@@ -24,7 +24,7 @@ const Table: React.FC = () => {
     }, []);
 
     return (
-        <section className="flex flex-col bg-white rounded-lg border border-gray-200">
+        <section className="flex flex-col bg-white">
             <header className="flex items-center px-6 py-7 bg-white text-lg font-medium">
                 <h2 className="text-gray-900 mr-5">Team members</h2>
                 <span className="px-2 py-0.5 text-xs text-violet-700 bg-purple-50 rounded-2xl">100 users</span>
