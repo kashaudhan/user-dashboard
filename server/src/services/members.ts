@@ -16,7 +16,7 @@ export const getMembers = async (req: Request, res: Response) => {
   try {
     const result = await db.query(
       `
-      SELECT * FROM member LIMIT $1 OFFSET $2
+      SELECT * FROM member ORDER BY id LIMIT $1 OFFSET $2
     `,
       [limit, offset]
     );
