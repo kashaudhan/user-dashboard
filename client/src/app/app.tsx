@@ -21,8 +21,12 @@ const Table: React.FC = () => {
     }
 
     useEffect(() => {
-        API.INIT_API();
         fetchUsers();
+    }, [page])
+    
+
+    useEffect(() => {
+        API.INIT_API();
     }, []);
 
     return (
@@ -51,7 +55,7 @@ const Table: React.FC = () => {
                 </table>
             </div>
             <footer className="flex justify-between items-center px-6 py-3 border-t border-gray-200 text-sm font-medium text-slate-700">
-                <Pagination totalRows={totalRows} rowsPerPage={10} />
+                <Pagination currentPage={page} setCurrentPage={setPage} totalRows={totalRows} rowsPerPage={10} />
             </footer>
         </section>
     );

@@ -1,13 +1,13 @@
-import { useState } from "react";
 
 type Pagination = {
   totalRows: number;
   rowsPerPage: number;
+  currentPage: number;
+  setCurrentPage:  React.Dispatch<React.SetStateAction<number>>
 };
 
-const Pagination = ({ totalRows, rowsPerPage }: Pagination) => {
+const Pagination = ({ totalRows, rowsPerPage, currentPage, setCurrentPage }: Pagination) => {
   const totalPages = Math.ceil(totalRows / rowsPerPage);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const handlePrev = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
@@ -36,7 +36,7 @@ const Pagination = ({ totalRows, rowsPerPage }: Pagination) => {
           return (
             <button
               key={page}
-              className="px-4 py-2.5 rounded-lg"
+              className={`px-4 py-2.5 rounded-lg ${currentPage === page ? "bg-purple-50 text-violet-500 rounded-md" : ""}`}
               onClick={() => handlePageClick(page)}
               disabled={currentPage === page}
             >
@@ -46,7 +46,7 @@ const Pagination = ({ totalRows, rowsPerPage }: Pagination) => {
         })}
       </div>
       <button
-        className="flex items-center gap-2 px-3.5 py-2 bg-white rounded-lg border border-gray-300 shadow-sm"
+        className={`flex items-center gap-2 px-3.5 py-2 bg-white rounded-lg border border-gray-300 shadow-sm`}
         onClick={handleNext}
         disabled={currentPage === totalPages}
       >
