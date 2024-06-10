@@ -6,8 +6,8 @@ export default {
     axios.defaults.baseURL = this.BASE_URL
   },
 
-  GET_MEMBERS() {
-    return axios.get("/members");
+  GET_MEMBERS(page: number, limit: number = 10) {
+    return axios.get(`/members?page=${page}&limit=${limit}`);
   },
   GET_MEMBER(id: number) {
     return axios.get(`/members/${id}`);
@@ -16,7 +16,7 @@ export default {
     return axios.post("/members", user);
   },
   UPDATE_MEMBER(user: User) {
-    return axios.put("/members", user);
+    return axios.put(`/members/${user.id}`, user);
 
   },
   DELETE_MEMBER(id: number) {

@@ -37,9 +37,7 @@ const EditUser = ({ isVisible, setIsVisible, user }: EditUser) => {
     e.preventDefault();
 
     try {
-      // const { data } = await API.UPDATE_MEMBER(newUserDetail);
-
-      // setNewUserDetail(data.data);
+      await API.UPDATE_MEMBER(newUserDetail);
       setIsUserUpdated(true);
     } catch (error) {}
   };

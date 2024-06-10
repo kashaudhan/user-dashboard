@@ -5,7 +5,7 @@ import React, { isValidElement, cloneElement, Children } from "react";
 const Backdrop = (props: { onClose: () => void; id?: string }) => {
 	return (
 		<div
-			className="fixed top-0 left-0 w-full h-[100vh] z-55 bg-gray-300/40"
+			className="fixed top-0 left-0 w-full h-[100vh] z-55 bg-black/40"
 			onClick={props.onClose}
 			id={props.id}
 		></div>

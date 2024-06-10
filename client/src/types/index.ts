@@ -1,10 +1,10 @@
 interface User {
   id: number;
   name: string;
-  username: string;
+  user_name: string;
   email: string;
   role: string;
-  status: string;
+  is_active: string;
   teams: string[];
   avatar?: string;
   initials?: string;

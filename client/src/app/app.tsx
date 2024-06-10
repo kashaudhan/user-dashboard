@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { UserRow } from "components/user-card";
-import { users } from "../constants/data";
 import API from "../services"
-
+import Pagination from "components/pagination";
 
 const Table: React.FC = () => {
 
-    const [usersData, setusersData] = useState([]);
+    const [usersData, setUsersData] = useState<User[]>([]);
+    const [page, setPage] = useState(1);
+    const [totalRows, setTotalRows] = useState(0);
 
     const fetchUsers = async () => {
         try {
-            const { data } = await API.GET_MEMBERS();
+            const { data } = await API.GET_MEMBERS(page);
 
-            console.log("Data: ", data);
+            setUsersData(data.data.members);
+            setTotalRows(data.data.row_count);
         } catch (error) {
             console.error(error);
         }
@@ -42,30 +44,14 @@ const Table: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody className="text-sm text-gray-500">
-                        {users.map((user) => (
+                        {usersData.map((user) => (
                             <UserRow key={user.id} {...user} />
                         ))}
                     </tbody>
                 </table>
             </div>
             <footer className="flex justify-between items-center px-6 py-3 border-t border-gray-200 text-sm font-medium text-slate-700">
-                <button className="flex items-center gap-2 px-3.5 py-2 bg-white rounded-lg border border-gray-300 shadow-sm">
-                    <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/df2bcf5f72691ee9326be9c547e724c01e89468d8eaa3c94790a8a85b087e9de?apiKey=d1982213c0344b17af133010773a2a3d&" alt="" className="w-5" />
-                    Previous
-                </button>
-                <div className="flex gap-0.5">
-                    <button className="px-4 py-2.5 bg-purple-50 text-violet-500 rounded-lg">1</button>
-                    <button className="px-4 py-2.5 rounded-lg">2</button>
-                    <button className="px-4 py-2.5 rounded-lg">3</button>
-                    <button className="px-3.5 py-2.5 rounded-lg">...</button>
-                    <button className="px-4 py-2.5 rounded-lg">8</button>
-                    <button className="px-4 py-2.5 rounded-lg">9</button>
-                    <button className="px-3 py-2.5 rounded-lg">10</button>
-                </div>
-                <button className="flex items-center gap-2 px-3.5 py-2 bg-white rounded-lg border border-gray-300 shadow-sm">
-                    Next
-                    <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/88c7d6d7365989a9d25aa36da7b11fd63b16ac73bdba84b851b035d393bb39f4?apiKey=d1982213c0344b17af133010773a2a3d&" alt="" className="w-5" />
-                </button>
+                <Pagination totalRows={totalRows} rowsPerPage={10} />
             </footer>
         </section>
     );
