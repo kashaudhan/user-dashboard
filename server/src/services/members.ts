@@ -31,8 +31,13 @@ export const getMembers = async (req: Request, res: Response) => {
       SELECT json_agg(member_team) FROM member_team;
     `, [ limit, offset ]);
 
+    const count = await db.query(`SELECT COUNT(*) as row_count FROM member_team`);
+
     return res.status(200).json({
-      data: result.rows[0].json_agg || []
+      data: {
+        members: result.rows[0].json_agg || [],
+        row_count: Number(count.rows[0].row_count)
+      }
     }).end();
     
   } catch (error) {
